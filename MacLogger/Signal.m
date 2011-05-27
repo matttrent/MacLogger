@@ -16,9 +16,12 @@
 
 
 - (id)init {
-	if (self = [super init]) {
+	if( ( self = [super init] ) )
+    {
 		numLogged = 0;
-		lastLoggedMs = 0;
+//		lastLoggedMs = 0;
+        lastLoggedMs = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
+
 	}
 	return self;
 }
@@ -89,18 +92,28 @@
 	
 	
 	// time delta
-	[fileHandle writeData:[UtilVarints
-							encodeUnsignedFromUnsignedLongLong:(ms - lastLoggedMs)]];
-	
+//	[fileHandle writeData:[UtilVarints
+//							encodeUnsignedFromUnsignedLongLong:(ms - lastLoggedMs)]];	
 	// data length
-	[fileHandle writeData:[UtilVarints
-							encodeUnsignedFromUnsignedLongLong:[data length]]];
+//	[fileHandle writeData:[UtilVarints
+//							encodeUnsignedFromUnsignedLongLong:[data length]]];
 	// data
 	[fileHandle writeData:data];
 	
 	 
 	numLogged++;
 	lastLoggedMs = ms;
+}
+
++ (NSString *)getISODate:(NSDate *)localDate
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+//    [dateFormatter setTimeZone:timeZone];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:localDate];
+    [dateFormatter release];
+    return dateString;
 }
 
 - (void)dealloc {

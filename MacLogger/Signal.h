@@ -21,6 +21,7 @@
 
 - (void)tick:(NSTimer*)timer;
 
++ (NSString *)getISODate:(NSDate *)localDate;
 
 @property (readonly) NSTimeInterval sampleInterval;
 

@@ -7,7 +7,8 @@
 @implementation InputIdleSignal
 
 - (id)init {
-	if (self = [super init]) {
+	if( ( self = [super init] ) )
+    {
 		sampleInterval = 0.05;
 		signalName = @"input-idle";
 	}

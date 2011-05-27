@@ -7,7 +7,8 @@
 
 
 - (id)init {
-	if (self = [super init]) {
+	if( ( self = [super init] ) )
+    {
 		sampleInterval = 0.2;
 		signalName = @"front-window";
 		
@@ -28,7 +29,10 @@
 	 */
 	
 	NSMutableDictionary *info = [NSMutableDictionary dictionary];
-	
+    
+//    NSDate* localDate       = [NSDate date];
+//	NSString* dateString    = [FrontWindowSignal getISODate:localDate];
+//    [info setObject:dateString forKey:@"datestamp"];
 	
 	NSDictionary *appInfo = [[NSWorkspace sharedWorkspace] activeApplication];
 	long pid = [[appInfo objectForKey:@"NSApplicationProcessIdentifier"] longValue];
@@ -59,12 +63,25 @@
 	}
 	
 	NSString *json = [info JSONRepresentation];
-	if (
-			(!lastJson) ||
-			(![lastJson isEqual:json])) {
+	if( ( !lastJson ) || ( ![lastJson isEqual:json] ) )
+    {
+        NSDate* localDate       = [NSDate date];
+        NSString* dateString    = [FrontWindowSignal getISODate:localDate];
+        [info setObject:dateString forKey:@"timestamp"];
+        
+        unsigned long long ms = (long long)([localDate timeIntervalSince1970] * 1000);
+        unsigned long long delta = ms - lastLoggedMs;
+        [info setObject:[NSNumber numberWithLongLong:delta] forKey:@"duration"];
+        
+//        [localDate dealloc];
+//        [dateString dealloc];
 		
-		[self logData:[json dataUsingEncoding:NSUTF8StringEncoding]];
-		
+//        [json dealloc];
+        NSString* tempjson = [[info JSONRepresentation] stringByAppendingString:@"\n"];
+        
+		[self logData:[tempjson dataUsingEncoding:NSUTF8StringEncoding]];
+
+//        [tempjson dealloc];
 		[lastJson dealloc];
 		lastJson = [json retain];
 	}

@@ -6,7 +6,8 @@
 
 
 - (id)init {
-	if (self = [super init]) {
+	if( ( self = [super init] ) )
+    {
 		sampleInterval = 15.0;
 		signalName = @"screenshot";
 	}
